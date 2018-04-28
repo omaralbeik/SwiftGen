@@ -5,7 +5,6 @@
 import Foundation
 import AppKit
 import FadeSegue
-import PrefsWindowController
 
 // swiftlint:disable superfluous_disable_command
 // swiftlint:disable file_length

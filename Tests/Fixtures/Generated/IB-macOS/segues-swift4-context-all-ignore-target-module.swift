@@ -5,7 +5,6 @@
 import Foundation
 import AppKit
 import FadeSegue
-import PrefsWindowController
 
 // swiftlint:disable superfluous_disable_command
 // swiftlint:disable file_length
@@ -24,7 +23,8 @@ internal extension CustomTabViewController {
   }
 
   internal func perform(segue: StoryboardSegue, sender: Any? = nil) {
-    performSegue(withIdentifier: segue.rawValue, sender: sender)
+    let identifier = NSStoryboardSegue.Identifier(segue.rawValue)
+    performSegue(withIdentifier: identifier, sender: sender)
   }
 
   internal enum TypedStoryboardSegue {
@@ -38,7 +38,7 @@ internal extension CustomTabViewController {
 
     // swiftlint:disable cyclomatic_complexity
     init(segue: StoryboardSegue) {
-      switch segue.identifier ?? "" {
+      switch segue.identifier?.rawValue ?? "" {
       case "Embed":
         guard let vc = segue.destinationController as? AppKit.NSViewController else {
           fatalError("Destination of segue 'Embed' is not of the expected type AppKit.NSViewController.")
@@ -75,7 +75,7 @@ internal extension CustomTabViewController {
       case "":
         self = .unnamedSegue
       default:
-        fatalError("Unrecognized segue '\(segue.identifier ?? "")' in CustomTabViewController")
+        fatalError("Unrecognized segue '\(segue.identifier?.rawValue ?? "")' in CustomTabViewController")
       }
     }
     // swiftlint:enable cyclomatic_complexity
@@ -100,7 +100,8 @@ internal protocol SegueType: RawRepresentable { }
 
 internal extension NSSeguePerforming {
   func perform<S: SegueType>(segue: S, sender: Any? = nil) where S.RawValue == String {
-    performSegue?(withIdentifier: segue.rawValue, sender: sender)
+    let identifier = NSStoryboardSegue.Identifier(segue.rawValue)
+    performSegue?(withIdentifier: identifier, sender: sender)
   }
 }
 
